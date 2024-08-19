@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background">
+        <img src="interior.png" alt="Background Image" class="background-image">
+        <!-- Clickable Areas -->
+        <a href="barrel_mouse.html" class="clickable-area" id="barrel_mouse" style="display: none;"></a>
+        <a href="indoor_table_1.html" class="clickable-area" id="indoor_table_1"></a>
+        <a href="indoor_table_2.html" class="clickable-area" id="indoor_table_2"></a>
+        <a href="shelf.html" class="clickable-area" id="shelf"></a>
+        <a href="window.html" class="clickable-area" id="window"></a>
+        <a href="barrel_scroll.html" class="clickable-area" id="barrel_scroll" style="display: none;"></a>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            const storedSecretWord = localStorage.getItem('secretWord');
+            const secretWord = "barrel"; // The word required to display the secret area
+            
+            if (storedSecretWord && storedSecretWord.toLowerCase() === secretWord.toLowerCase()) {
+                document.getElementById('barrel_scroll').style.display = 'block';
+                document.getElementById('barrel_mouse').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background">
+        <img src="code.png" alt="Background Image" class="background-image">
+    </div>
+    <div class="combination">
+        <input type="number" id="num1" maxlength="1" class="num-box" oninput="handleInput(this, 'num2')" onkeydown="handleBackspace(event, '', 'num1')">
+        <input type="number" id="num2" maxlength="1" class="num-box" oninput="handleInput(this, 'num3')" onkeydown="handleBackspace(event, 'num1', 'num2')">
+        <input type="number" id="num3" maxlength="1" class="num-box" oninput="handleInput(this, 'num4')" onkeydown="handleBackspace(event, 'num2', 'num3')">
+        <input type="number" id="num4" maxlength="1" class="num-box" oninput="handleInput(this, '')" onkeydown="handleBackspace(event, 'num3', 'num4')">
+    </div>
+    <div class="open-button">
+        <a href="card.html" id="open">Open</a>
+    </div>
+    <script>
+        // Function to handle input, transform to uppercase, and move to the next input box
+        function handleInput(current, nextFieldId) {
+            if (current.value.length === 1 && nextFieldId) {
+                document.getElementById(nextFieldId).focus();
+            }
+            saveNumber();
+        }
+
+        function checkNumber() {
+            const storedNum = localStorage.getItem('secretNum');
+            const secretNum = "8537";
+
+            const borderColour = (storedNum && storedNum.toLowerCase() === secretNum.toLowerCase()) ? '1px solid #0be62c' : '1px solid #e60b0b';
+            const buttonDisplay = (storedNum && storedNum.toLowerCase() === secretNum.toLowerCase()) ? 'block' : 'none';
+
+            var elements = document.getElementsByClassName('num-box');
+
+            for(i = 0; i < elements.length; i++) {
+                elements[i].style.border = borderColour;
+            }
+
+            // Make button appear if code is correct; button will go to final page
+            document.getElementById('open').style.display = buttonDisplay;
+        }
+
+        // Function to handle the Backspace key
+        function handleBackspace(event, prevFieldId, currentFieldId) {
+            const currentInput = document.getElementById(currentFieldId);
+
+            // If Backspace is pressed and the current box is empty, move to the previous box
+            if (event.key === 'Backspace' && currentInput.value === '' && prevFieldId) {
+                document.getElementById(prevFieldId).focus();
+            }
+        }
+
+        function saveNumber() {
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+            const num3 = document.getElementById('num3').value;
+            const num4 = document.getElementById('num4').value;
+
+            const secretNum = num1.toString() + num2.toString() + num3.toString() + num4.toString();
+            if (secretNum.length === 4) {
+                localStorage.setItem('secretNum', secretNum);
+            }
+
+            checkNumber();
+        }
+
+        window.addEventListener('load', function() {
+            const savedSecretNum = localStorage.getItem('secretNum');
+            if (savedSecretNum) {
+                document.getElementById('num1').value = savedSecretNum[0];
+                document.getElementById('num2').value = savedSecretNum[1];
+                document.getElementById('num3').value = savedSecretNum[2];
+                document.getElementById('num4').value = savedSecretNum[3];
+            }
+
+            checkNumber();
+        });
+    </script>
+</body>
+</html>

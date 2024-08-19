@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background">
+        <img src="game.png" alt="Background Image" class="background-image">
+    </div>
+    <div class="controls">
+        <input type="text" id="char1" maxlength="1" class="input-box" oninput="handleInput(this, 'char2')" onkeydown="handleBackspace(event, '', 'char1')">
+        <input type="text" id="char2" maxlength="1" class="input-box" oninput="handleInput(this, 'char3')" onkeydown="handleBackspace(event, 'char1', 'char2')">
+        <input type="text" id="char3" maxlength="1" class="input-box" oninput="handleInput(this, 'char4')" onkeydown="handleBackspace(event, 'char2', 'char3')">
+        <input type="text" id="char4" maxlength="1" class="input-box" oninput="handleInput(this, 'char5')" onkeydown="handleBackspace(event, 'char3', 'char4')">
+        <input type="text" id="char5" maxlength="1" class="input-box" oninput="handleInput(this, 'char6')" onkeydown="handleBackspace(event, 'char4', 'char5')">
+        <input type="text" id="char6" maxlength="1" class="input-box" oninput="handleInput(this, '')" onkeydown="handleBackspace(event, 'char5', 'char6')">
+    </div>
+    <script>
+        // Function to handle input, transform to uppercase, and move to the next input box
+        function handleInput(current, nextFieldId) {
+            current.value = current.value.toUpperCase(); // Convert to uppercase
+            if (current.value.length === 1 && nextFieldId) {
+                document.getElementById(nextFieldId).focus();
+            }
+            saveSecretWord();
+        }
+
+        function checkSecretWord() {
+            const storedSecretWord = localStorage.getItem('secretWord');
+            const secretWord = "barrel";
+
+            const borderColour = (storedSecretWord && storedSecretWord.toLowerCase() === secretWord.toLowerCase()) ? '1px solid #0be62c' : '1px solid #e60b0b';
+
+            var elements = document.getElementsByClassName('input-box');
+
+            for(i = 0; i < elements.length; i++) {
+                elements[i].style.border = borderColour;
+            }
+        }
+
+        // Function to handle the Backspace key
+        function handleBackspace(event, prevFieldId, currentFieldId) {
+            const currentInput = document.getElementById(currentFieldId);
+
+            // If Backspace is pressed and the current box is empty, move to the previous box
+            if (event.key === 'Backspace' && currentInput.value === '' && prevFieldId) {
+                document.getElementById(prevFieldId).focus();
+            }
+        }
+
+        function saveSecretWord() {
+            const char1 = document.getElementById('char1').value;
+            const char2 = document.getElementById('char2').value;
+            const char3 = document.getElementById('char3').value;
+            const char4 = document.getElementById('char4').value;
+            const char5 = document.getElementById('char5').value;
+            const char6 = document.getElementById('char6').value;
+
+            const secretWord = char1 + char2 + char3 + char4 + char5 + char6;
+            if (secretWord.length === 6) {
+                localStorage.setItem('secretWord', secretWord);
+            }
+
+            checkSecretWord();
+        }
+
+        window.addEventListener('load', function() {
+            const savedSecretWord = localStorage.getItem('secretWord');
+            if (savedSecretWord) {
+                document.getElementById('char1').value = savedSecretWord[0];
+                document.getElementById('char2').value = savedSecretWord[1];
+                document.getElementById('char3').value = savedSecretWord[2];
+                document.getElementById('char4').value = savedSecretWord[3];
+                document.getElementById('char5').value = savedSecretWord[4];
+                document.getElementById('char6').value = savedSecretWord[5];
+            }
+
+            checkSecretWord();
+        });
+    </script>
+</body>
+</html>
